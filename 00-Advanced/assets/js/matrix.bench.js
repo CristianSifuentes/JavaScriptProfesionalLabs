@@ -7,7 +7,8 @@ const {
    mulConcurrent,
    fillDeterministic,
    withBlockRows,
-   withBlockRows
+   withBlockRows,
+   withWorkers
  } = require('./matrix');
 
  async function bench(name, fn, iters = 5) {
@@ -15,10 +16,28 @@ const {
     await fn();
     const start = performance.now();
     for(let i= 0; i < iters; i++) await fn();
+    const elapsed = performance.now() - start;
+
+
+    console.log(`${name}: ${elapsed.toFixed(2)}ms`);
 
 
  }
 
  (async() => {
+   const size  = 512;
+   const baseA = Matrix.new(size, size);
+   const baseB = Matrix.new(size, size);
 
- })();
+   const a = fillDeterministic(baseA, 1.0);
+   const b = fillDeterministic(baseB, 2.0);
+
+   await bench('Mul concurrent', async () => {
+          await  mulConcurrent(
+            a, 
+            b,
+            {}, 
+            withWorkers(os.cpus().length),withBlockRows(32));
+   });
+
+ })(); 512
