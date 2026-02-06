@@ -17,6 +17,19 @@ try {
     const btData = new Float64Array(bt.sab);
     const outData = new Float64Array(out.sab);
 
+    const cols = out.cols;
+    const kmax = a.c;
+
+    parentPort.on('message', (msg) => {
+        if(msg.type === 'shutdown') {
+            process.exit(0);
+            return;
+        }
+    });
+
+    if(msg.type !== 'job') return;
+    
+
 } catch(e) {
     die(e?.stack ?? String(e));
 }

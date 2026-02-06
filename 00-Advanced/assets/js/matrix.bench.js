@@ -32,12 +32,14 @@ const {
    const a = fillDeterministic(baseA, 1.0);
    const b = fillDeterministic(baseB, 2.0);
 
-   await bench('Mul concurrent', async () => {
+   await bench('MulConcurrent_512', async () => {
           await  mulConcurrent(
             a, 
             b,
             {}, 
-            withWorkers(os.cpus().length),withBlockRows(32));
-   });
+            withWorkers(os.cpus().length),
+            withBlockRows(32)
+          );
+   }, 3);
 
- })(); 512
+ })(); 
